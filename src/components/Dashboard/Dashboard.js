@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import {getPosts} from '../../ducks/reducers/postReducer'
+import axios from 'axios'
 
 
 class Dashboard extends Component {
@@ -8,17 +9,32 @@ class Dashboard extends Component {
         super(props)
 
         this.state = {
+            posts: [],
             search: ''
         }
     };
 
+    componentDidMount = () => {
+        this.getAllPosts()
+    };
+
+
     handleInput = (event) => {
         this.setState({[event.target.name]: event.target.value})
-    }
+    };
 
     clearSearchBar = () =>{
         this.setState({search: ''})
-    }
+    };
+
+
+    getAllPosts = () =>{
+        axios.get('/api/get-posts')
+        .then(res => {
+            this.setState({posts: res.data})
+        })
+        .catch(error => console.log(error))
+    };
 
 
 
@@ -35,6 +51,12 @@ class Dashboard extends Component {
                         <button>Search</button>
                         <p>My Posts</p><input type={'checkbox'}/>
                     </div>
+                <div>
+                    <ul>
+                        {this.state.posts}
+                    </ul>
+                </div>
+                
             </div>
         )
     }

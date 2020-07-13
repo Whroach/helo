@@ -1,11 +1,19 @@
 import React, { Component } from 'react'
 
-export default class Post extends Component {
+
+class Post extends Component {
+
+
     render() {
         return (
             <div>
-                <h1>Post</h1>
+
             </div>
         )
     }
 }
+
+export default Post
+// const mappedStateToProps = state => state
+
+// export default connect(mappedStateToProps, {createPost})(Post)

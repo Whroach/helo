@@ -15,7 +15,7 @@ app.use(session({
     resave: false,
     saveUninitialized: true,
     secret: SESSION_SECRET,
-    cookie: {maxAge: 1000 * 60 * 60}
+    cookie: {maxAge: 1000 * 60 * 60 * 365}
 }))
 
 massive({
@@ -27,9 +27,18 @@ massive({
     // console.log('db connected')
 });
 
+//AUTH ENDPOINTS
+
 // app.get('/api/users', mainCtrl.getUsers)
 app.post('/api/register', authCtrl.register)
 app.post('/api/login', authCtrl.login)
+
+//POST ENDPOINTS
+app.get('/api/get-posts',mainCtrl.getPost)
+app.post('/api/create-post', mainCtrl.createPost)
+
+
+
 
 
 

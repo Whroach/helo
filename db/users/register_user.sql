@@ -1,5 +1,5 @@
-INSERT INTO helo_users (username, password)
+INSERT INTO helo_users (username, password, profile_pic)
 VALUES 
-( ${username}, ${password})
+( ${username}, ${password}, ${profilePic} )
 
--- returning id, username
+returning id, username, profile_pic;

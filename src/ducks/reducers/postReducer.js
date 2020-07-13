@@ -1,24 +1,29 @@
 
 const initialState = {
-    posts: [],
-    usersPosts: []
+    posts: {},
+    usersPosts: {}
 }
 
 //action type variables
 
 const GET_POSTS = 'GET_POSTS'
+const CREATE_POST = 'CREATE_POST'
 
-export function getPosts(title,image,content){
+export function getPosts(findPost){
     return {
         type: GET_POSTS,
-        payload: {
-            title,
-            image,
-            content
-        }
+        payload: { findPost }
     }
 };
 
+export function createPost(newPost){
+    return {
+        type: CREATE_POST,
+        payload: {
+            newPost
+        }
+    }
+}
 
 //export default function reducer
 
@@ -28,6 +33,9 @@ export default function postReducer(state = initialState, action){
     switch(type){
         case GET_POSTS: 
         return {...state, posts: payload}
+
+        case CREATE_POST: 
+        return {...state, posts:payload}
 
         default: 
         return state

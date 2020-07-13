@@ -11,26 +11,25 @@ class Authentication extends Component {
         this.state = {
             username: '',
             password: '',
-            profilePic: ''
+            picture: ''
     }
 };
 
     componentDidMount = () => {
-        if(!this.props.username){
-            this.props.history.push('/dashboard')
-        }        
+        // if(this.props.username){
+        //     this.props.history.push('/dashboard')
+        // }        
     }
 
     handleRegisterUser = () => {
-        const {username, password} = this.state
-
-        if(!username && !password){
-            axios.post('/api/register', {username, password})
+        const {username, password, picture} = this.state
+            axios.post('/api/register', {username, password, profilePic:picture})
             .then(res=> {
+                this.props.findUser(res.data)
                 this.props.history.push('/dashboard')
             })
             .catch(error => console.log(error))
-        }
+
         // else{
         //     alert('Inputs cannot be empty!')
         // }
@@ -64,6 +63,8 @@ class Authentication extends Component {
                          value={this.state.username} name='username' onChange={(element) => this.handleInput(element)}></input>
                         <p>Password:</p><input
                         value={this.state.password} name='password' onChange={(element) => this.handleInput(element)}></input>
+                        <p>Profile Picture:</p><input
+                        value={this.state.picture} name='picture' onChange={(element) => this.handleInput(element)}></input>
                     </ul>
                     {/* <Link to={'./dashboard'}><button onSubmit={() => this.registerUser}>Register</button></Link> */}
                     <button onClick={this.handleRegisterUser}>Register</button>
@@ -74,6 +75,6 @@ class Authentication extends Component {
         )
     }
 }
-const mapStateToProps = state => state
+const mapStateToProps = state => state.authReducer
 
 export default connect(mapStateToProps, {findUser})(Authentication)
