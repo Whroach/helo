@@ -32,12 +32,13 @@ massive({
 // app.get('/api/users', mainCtrl.getUsers)
 app.post('/api/register', authCtrl.register)
 app.post('/api/login', authCtrl.login)
+app.get('/api/logout', authCtrl.logout)
 
 //POST ENDPOINTS
-app.get('/api/get-posts',mainCtrl.getPost)
+app.get('/api/get-posts',mainCtrl.searchPost)
 app.post('/api/create-post', mainCtrl.createPost)
-
-
+app.get('/api/user-posts/:id', mainCtrl.getUserPosts)
+// app.get('/api/search-posts/:search', mainCtrl.searchPost)
 
 
 

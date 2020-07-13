@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import {getPosts} from '../../ducks/reducers/postReducer'
 import axios from 'axios'
+import { Link } from 'react-router-dom'
 
 
 class Dashboard extends Component {
@@ -10,13 +11,25 @@ class Dashboard extends Component {
 
         this.state = {
             posts: [],
-            search: ''
+            search: '',
+            userPosts: true
         }
     };
 
     componentDidMount = () => {
+        // const {userPosts } = this.state
+        // userPosts ? this.getAllPosts() : this.getUserPosts()
+        
         this.getAllPosts()
     };
+
+    searchForPosts = (id) =>{
+        axios.get(`/api/search-posts/${id}`)
+        .then(res => {
+            this.setState({posts: res.data})
+        })
+        .catch(error => console.log(error))
+    }
 
 
     handleInput = (event) => {
@@ -37,10 +50,61 @@ class Dashboard extends Component {
     };
 
 
+    getUserPosts = (id) =>{
+        axios.get(`/api/user-posts/:${id}`)
+        .then(res => {
+            this.setState({posts: res.data})
+        })
+        .catch(error => console.log(error))
+
+    }
+
+
+    toggleUserPosts = () => {
+        this.setState({userPosts: !this.state.userPosts})
+        // .then(this.getUserPosts(id))
+
+    }
+
 
 
     render() {
-        // console.log(this.props)
+
+        console.log(this.state.posts)
+        // const {search} = this.state
+        // console.log(this.state.posts[1])
+        const mappedPosts = this.state.posts.map((post,i) => {
+
+            return (
+
+                <Link to='/post/:props.match.params'>
+                <div key={i}>
+                    {this.state.userPosts
+                    ?
+                    <ol key={i}>
+                        {/* <img src={post.img}/> */}
+                        {post.title}
+                        {post.content}
+                        {post.username}
+                        <img src={post.profile_pic}/>
+                    </ol>
+                    :
+                    <ol key={i}>
+                        {/* <img src={post.img}/> */}
+                        {post.title}
+                        {post.content}
+                        {post.username}
+                        <img src={post.profile_pic}/>
+                    </ol>
+
+                }   
+
+                </div>
+                </Link>
+            
+            )
+        })
+
  
         return (
             <div>
@@ -48,15 +112,11 @@ class Dashboard extends Component {
                     <div>
                         <input value={this.state.search} name='search' onChange={(element) => this.handleInput(element)}/>
                         <button onClick={this.clearSearchBar}>Reset</button>
-                        <button>Search</button>
-                        <p>My Posts</p><input type={'checkbox'}/>
+                        <button onClick={this.searchForPosts}>Search</button>
+                        <p>My Posts</p><input type={'checkbox'} onClick={this.toggleUserPosts}/>
                     </div>
-                <div>
-                    <ul>
-                        {this.state.posts}
-                    </ul>
-                </div>
-                
+                    <ul>{mappedPosts}</ul>
+             
             </div>
         )
     }
