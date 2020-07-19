@@ -15,6 +15,10 @@ class Form extends Component {
         }
     };
 
+    componentDidMount = () =>{
+
+    }
+
     handleInput = (event) =>{
         this.setState({[event.target.name]: event.target.value})
     }
@@ -36,16 +40,16 @@ class Form extends Component {
 
         // console.log(this.props.authReducer.user.id)
         return (
-            <div>
-            <h1>New Post</h1>
-            <div>
-                <form>
-                    <p>Title:</p><input value={this.state.title} name='title' onChange={(e) => this.handleInput(e)}></input>
-                    <p>Image URL:</p><input value={this.state.image} name='image' onChange={(e) => this.handleInput(e)}></input>
-                    <p>Content:</p><input value={this.state.content} name='content' onChange={(e) => this.handleInput(e)}></input>
-                </form>
-                <button onClick={this.createUserPost}>Post</button>
-            </div>
+        <div className="new_post">
+                {/* <h1>New Post</h1> */}
+                <div>
+                    <form>
+                        <p>Title:</p><input value={this.state.title} name='title' onChange={(e) => this.handleInput(e)}></input>
+                        <p>Image URL:</p><input value={this.state.image} name='image' onChange={(e) => this.handleInput(e)}></input>
+                        <p>Content:</p><input value={this.state.content} name='content' onChange={(e) => this.handleInput(e)}></input>
+                    </form>
+                    <button onClick={this.createUserPost}>Post</button>
+                </div>
         </div>
         )}
 };

@@ -24,7 +24,7 @@ massive({
 })
 .then(db => {
     app.set('db', db);
-    // console.log('db connected')
+    console.log('db connected')
 });
 
 //AUTH ENDPOINTS
@@ -35,12 +35,14 @@ app.post('/api/login', authCtrl.login)
 app.get('/api/logout', authCtrl.logout)
 
 //POST ENDPOINTS
-app.get('/api/get-posts',mainCtrl.searchPost)
+app.get('/api/get-posts',mainCtrl.getPost)
 app.post('/api/create-post', mainCtrl.createPost)
-app.get('/api/user-posts/:id', mainCtrl.getUserPosts)
+app.get('/api/user-posts/:id/', mainCtrl.getUserPosts)
 // app.get('/api/search-posts/:search', mainCtrl.searchPost)
 
-
+app.get('/api/post/:id', mainCtrl.testPost)
+app.get('/api/single-post/:id', mainCtrl.onePost)
+app.delete('/api/post/:id', mainCtrl.deletePost)
 
 
 

@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import axios from 'axios'
 
 
@@ -7,43 +8,66 @@ class Post extends Component {
         super(props)
 
         this.state = {
-            title: '',
-            content: '',
-            username: '',
-            picture: ''
+            post: []
         }
     };
 
-    // componentDidMount() {
-    //     let post = post.find(post => post.id === parseInt(this.props.match.params.id));
-    //     this.setState({
-    //       title: post.title,
-    //       content: post.content,
-    //       username: post.username,
-    //       picture: post.profile_pic
-    //     });
-    //   }
+    componentDidMount = () =>{
+        this.singlePost()
 
-    getUserPosts = (id) =>{
-        axios.get(`/api/user-posts/:${id}`)
-        .then(res => {
-            this.setState({posts: res.data})
+
+
+    }
+
+    singlePost=()=>{
+        const  { params }= this.props.match
+        const id = parseInt(params.id)
+
+        axios.get(`/api/single-post/${id}`)
+        .then( res => 
+            this.setState({
+                post: res.data[0]
+
+            })
+            )
+        .catch(() => console.log('axios error in post'))
+
+    }
+
+    deletePost = (id) =>{
+        axios.delete(`/api/post/${id}`)
+        .then(()=>{
+            this.props.history.push('/dashboard')
         })
         .catch(error => console.log(error))
 
     }
 
 
+
     render() {
+        console.log(this.state)
+        const {id, content, profile_pic, title, username } = this.state.post
+        
+        
         return (
             <div>
+                <div id="single-post">
+                    <ol>
+                        <img src={profile_pic}/>
+                        <p>{username}</p>
+                        <p>{content}</p>
+                        <p>{title}</p>
+                    </ol>
+                    <div id="delete-button"><button onClick={() =>{this.deletePost(id)}}>Delete</button></div>
+                </div>
 
             </div>
         )
     }
 }
 
-export default Post
-// const mappedStateToProps = state => state
 
-// export default connect(mappedStateToProps, {createPost})(Post)
+const mappedStateToProps = state => state
+
+export default connect(mappedStateToProps)(Post)

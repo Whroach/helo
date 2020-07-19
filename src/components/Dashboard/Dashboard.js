@@ -9,111 +9,87 @@ class Dashboard extends Component {
     constructor(props){
         super(props)
 
+
         this.state = {
             posts: [],
             search: '',
-            userPosts: true
+            userposts: true
         }
     };
 
-    componentDidMount = () => {
-        // const {userPosts } = this.state
-        // userPosts ? this.getAllPosts() : this.getUserPosts()
-        
-        this.getAllPosts()
-    };
 
-    searchForPosts = (id) =>{
-        axios.get(`/api/search-posts/${id}`)
-        .then(res => {
-            this.setState({posts: res.data})
+   componentDidMount=()=>{
+       this.getPost()
+   }
+
+
+    getPost = () =>{
+        const { userposts, search } = this.state
+        const { id } = this.props.authReducer.user
+        axios.get(`/api/post/${id}`, {params: {userposts: userposts, search: search}})
+        .then(response => {
+            this.setState({posts: response.data})
         })
         .catch(error => console.log(error))
     }
+
 
 
     handleInput = (event) => {
         this.setState({[event.target.name]: event.target.value})
     };
 
+
+
+
+    toggleUserPosts = () => {
+        this.setState({userposts: !this.state.userposts})
+
+    }
+
+    //Search Functionality 
     clearSearchBar = () =>{
         this.setState({search: ''})
     };
 
 
-    getAllPosts = () =>{
-        axios.get('/api/get-posts')
-        .then(res => {
-            this.setState({posts: res.data})
-        })
-        .catch(error => console.log(error))
-    };
-
-
-    getUserPosts = (id) =>{
-        axios.get(`/api/user-posts/:${id}`)
-        .then(res => {
-            this.setState({posts: res.data})
-        })
-        .catch(error => console.log(error))
-
-    }
-
-
-    toggleUserPosts = () => {
-        this.setState({userPosts: !this.state.userPosts})
-        // .then(this.getUserPosts(id))
-
-    }
-
-
 
     render() {
 
-        console.log(this.state.posts)
-        // const {search} = this.state
-        // console.log(this.state.posts[1])
+
         const mappedPosts = this.state.posts.map((post,i) => {
 
+            console.log(post)
             return (
-
-                <Link to='/post/:props.match.params'>
-                <div key={i}>
-                    {this.state.userPosts
-                    ?
-                    <ol key={i}>
-                        {/* <img src={post.img}/> */}
-                        {post.title}
-                        {post.content}
-                        {post.username}
-                        <img src={post.profile_pic}/>
-                    </ol>
-                    :
-                    <ol key={i}>
-                        {/* <img src={post.img}/> */}
-                        {post.title}
-                        {post.content}
-                        {post.username}
-                        <img src={post.profile_pic}/>
-                    </ol>
-
-                }   
-
+                <div className="posts_list">
+                    <div className="post_content">
+                    <Link to={`/post/${post.id}`}>
+                    <div key={i}>
+                        <ol key={i}>
+                            {post.title}
+                            {post.content}
+                            <p id="profile-name">{post.username}</p>
+                            <img id="profile-pic"src={post.profile_pic}/>
+                            
+                        </ol>
+                    </div>
+                    </Link>
+                    </div>
                 </div>
-                </Link>
-            
             )
+
         })
 
  
         return (
-            <div>
+            <div className="dash">
                 <h1>Dashboard</h1>
-                    <div>
+                    <div className="filter_section">
                         <input value={this.state.search} name='search' onChange={(element) => this.handleInput(element)}/>
                         <button onClick={this.clearSearchBar}>Reset</button>
-                        <button onClick={this.searchForPosts}>Search</button>
-                        <p>My Posts</p><input type={'checkbox'} onClick={this.toggleUserPosts}/>
+                        <button onClick={this.componentDidMount}>Search</button>
+                        <p>My Posts</p><input type={'checkbox'} onChange={this.toggleUserPosts}/>
+              
                     </div>
                     <ul>{mappedPosts}</ul>
              

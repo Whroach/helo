@@ -20,9 +20,10 @@ module.exports = {
         hash = bcrypt.hashSync(password, salt);
 
   
-    const newUser = await db.users.register_user({username, password: hash, profilePic});
+    const newUser = await db.users.register_user({username,  password: hash, profilePic});
     req.session.user = newUser[0];
-    res.status(201).send(req.session.user);
+    res.status(201).send(req.session.user)
+
     },
 
     login: async(req, res) =>{
@@ -31,10 +32,6 @@ module.exports = {
 
 
         const foundUser = await db.users.get_user({username})
-        console.log(username)
-    
-
-        console.log(foundUser)
 
         if(!foundUser[0]){
             return res.status(400).send('User cannot be found')
